@@ -4,7 +4,8 @@ import edu.curtin.app.classes.Task;
 
 import java.io.IOException;
 import java.util.*;
-// disclaimer, not anything to do with windows task manager, just a cool name :)
+import java.util.stream.Collectors;
+// disclaimer, not anything to do with windows task manager :/
 /**
  * Task manager to load tasks into a list
  * created at: 25/03/24
@@ -21,5 +22,24 @@ public class TaskManager {
             return true;
         }
         return false;
+    }
+
+    public void displayWBSAndSummary() {
+        displayWBS(tasks, "", new HashSet<>());
+    }
+
+    private void displayWBS(List<Task> tasks, String indent, Set<String> displayed) {
+        for (Task task : tasks) {
+            if (!displayed.contains(task.getTaskID())) {
+                System.out.println(indent + task.getTaskID() + ": " + task.getTaskDesc() 
+                                                             + (task.getEffortEstimate() > 0 ? ", effort = " 
+                                                             + task.getEffortEstimate() : ""));
+                displayed.add(task.getTaskID());
+                List<Task> subtasks = tasks.stream()
+                                           .filter(t -> task.getTaskID().equals(t.getParentID()))
+                                           .collect(Collectors.toList());
+                displayWBS(subtasks, indent + "  ", displayed);
+            }
+        }
     }
 }

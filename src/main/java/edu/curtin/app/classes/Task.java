@@ -1,10 +1,10 @@
 package edu.curtin.app.classes;
 
 public class Task {
-    private String parentID; //can be null
-    private String taskID;
+    private String parentID; //can be empty, depends on the task
+    private String taskID; // id of the current task
     private String taskDesc; // may contain  any characters   except  \n  and   ;
-    private int effortEstimate;
+    private int effortEstimate; //a number classifying how long a task will take 
 
     //CONSTRUCTOR
     

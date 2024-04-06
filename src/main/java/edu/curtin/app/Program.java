@@ -9,6 +9,7 @@ import edu.curtin.app.services.Configure;
 import edu.curtin.app.services.EstimateEffort;
 import edu.curtin.app.services.FileIO;
 import edu.curtin.app.services.Quit;
+import edu.curtin.app.services.TaskManager;
 
 /**
  * Entry point for application
@@ -19,11 +20,12 @@ import edu.curtin.app.services.Quit;
  public class Program {
     private static List<Task> taskList = new ArrayList<>();
     private static final List<MenuOption> OPTIONS = new ArrayList<>();
+    private static TaskManager ts= new TaskManager();
 
     public static void main(String[] args) throws IOException {
         initializeOptions();
         FileIO io = new FileIO();
-        Menu menu = new Menu();
+        Menu menu = new Menu(ts);
         Scanner sc = new Scanner(System.in);
         String fileName = getValidFileName(args, sc, io);
         if (fileName != null) {
@@ -35,6 +37,7 @@ import edu.curtin.app.services.Quit;
     
         boolean done = false;
         while (!done) {
+            
             int choice = menu.getMenuChoice();
             for (MenuOption option : OPTIONS) {
                 if (option.getLabel() == choice) {
