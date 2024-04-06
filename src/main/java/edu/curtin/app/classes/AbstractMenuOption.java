@@ -19,6 +19,4 @@ public abstract class AbstractMenuOption implements MenuOption {
     public String getDescription() {
         return description;
     }
-
-    // Keep executeOption(List<Task> taskList) as abstract to be implemented by subclasses
 }

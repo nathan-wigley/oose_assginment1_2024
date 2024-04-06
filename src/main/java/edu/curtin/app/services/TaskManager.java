@@ -49,7 +49,7 @@ import java.util.*;
                                  .filter(task -> task.getEffortEstimate() == 0 && task.getParentID() != null)
                                  .count();
 
-        System.out.println("\nTotal known effort = " + totalEffort);
+        System.out.println("\nTotal of all known estimate = " + totalEffort);
         System.out.println("Unknown tasks = " + unknownTasks);
     }
 
