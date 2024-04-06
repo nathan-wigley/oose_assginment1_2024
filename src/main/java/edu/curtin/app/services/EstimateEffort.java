@@ -11,7 +11,7 @@ import edu.curtin.app.interfaces.MenuOption;
 public class EstimateEffort implements MenuOption {
 
     @Override
-    public String executeOption(List<Task> taskList) {
+    public String executeOption(List<Task> taskList, String filename) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter a taskID:");
         String taskID = sc.nextLine();

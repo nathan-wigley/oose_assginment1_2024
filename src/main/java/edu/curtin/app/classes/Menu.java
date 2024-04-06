@@ -12,7 +12,6 @@ public class Menu {
 
     public int getMenuChoice() {
         Scanner sc = new Scanner(System.in);
-        taskManager.displayWBSAndSummary();
         System.out.println(getMenuDisplay());
         try {
             return Integer.parseInt(sc.nextLine());

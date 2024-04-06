@@ -1,7 +1,9 @@
 package edu.curtin.app.services;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -53,5 +55,24 @@ public class FileIO {
         int effortEstimate = parts.length > 3 && !parts[3].isEmpty() ? Integer.parseInt(parts[3]) : 0;
     
         return new Task(parentID, taskID, taskDesc, effortEstimate);
+    }
+
+    public void writeTasksToFile(String filename, List<Task> tasks) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (Task task : tasks) {
+                String line = constructLineFromTask(task);
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Failed to write task list to file: " + filename, e);
+            throw e;
+        }
+    }
+
+    private String constructLineFromTask(Task task) {
+        String parentPart = task.getParentID() == null ? "" : task.getParentID() + " ; ";
+        String effortPart = task.getEffortEstimate() > 0 ? " ; " + task.getEffortEstimate() : " ; ";
+        return parentPart + task.getTaskID() + " ; " + task.getTaskDesc() + effortPart;
     }
 }

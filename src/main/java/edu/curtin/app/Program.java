@@ -20,55 +20,50 @@ import edu.curtin.app.services.TaskManager;
  public class Program {
     private static List<Task> taskList = new ArrayList<>();
     private static final List<MenuOption> OPTIONS = new ArrayList<>();
-    private static TaskManager ts= new TaskManager();
-
+    private static TaskManager ts = new TaskManager();
+    public static String fileName = null;
     public static void main(String[] args) throws IOException {
-        initializeOptions();
-        FileIO io = new FileIO();
-        Menu menu = new Menu(ts);
-        Scanner sc = new Scanner(System.in);
-        String fileName = getValidFileName(args, sc, io);
-        if (fileName != null) {
-            taskList = io.loadList(fileName);
-        } else {
-            System.out.println("No valid file provided. Exiting...");
+        fileName = getValidFileName(args);
+        if (fileName == null || !ts.loadTasksFromFile(fileName)) {
+            System.out.println("No valid file provided or failed to load tasks. Exiting...");
             return;
         }
-    
+
+        initializeOptions();
+
         boolean done = false;
         while (!done) {
-            
+            ts.displayWBSAndSummary();
+            Menu menu = new Menu(ts);
             int choice = menu.getMenuChoice();
             for (MenuOption option : OPTIONS) {
                 if (option.getLabel() == choice) {
-                    option.executeOption(taskList);
-                    if (option instanceof Quit) {
-                        done = true;
-                    }
+                    done = processMenuOption(option);
                     break;
                 }
             }
         }
     }
+
+    private static boolean processMenuOption(MenuOption option) {
+        option.executeOption(ts.getTasks(), fileName);
+        return option instanceof Quit;
+    }
+
+    private static String getValidFileName(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (args.length > 0) {
+            System.out.println("Attempting to load file: " + args[0]);
+            return args[0];
+        } else {
+            System.out.println("Please enter the name of an existing file: ");
+            return sc.nextLine();
+        }
+    }
+
     private static void initializeOptions() {
         OPTIONS.add(new EstimateEffort());
         OPTIONS.add(new Configure());
         OPTIONS.add(new Quit());
-    }
-
-    private static String getValidFileName(String[] args, Scanner sc, FileIO io) {
-        if (args.length > 0 && io.checkFileExists(args[0])) {
-            return args[0];
-        }
-        System.out.println("Please enter the name of an existing file: ");
-        while (true) {
-            String input = sc.nextLine();
-            if (io.checkFileExists(input)) {
-                return input;
-            } else if (input.equalsIgnoreCase("exit")) {
-                return null;
-            }
-            System.out.println("File does not exist. Please try again or type 'exit' to quit: ");
-        }
     }
 }

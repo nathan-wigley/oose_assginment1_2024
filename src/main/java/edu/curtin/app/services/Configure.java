@@ -1,15 +1,9 @@
 package edu.curtin.app.services;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import edu.curtin.app.classes.AbstractMenuOption;
-import edu.curtin.app.classes.Estimates;
 import edu.curtin.app.classes.Task;
 
 
@@ -19,7 +13,7 @@ import edu.curtin.app.classes.Task;
  * @author Nathan Wigley (20644750)
  */
 
-public class Configure extends AbstractMenuOption {
+ public class Configure extends AbstractMenuOption {
 
     public static int numEstimators;
     public static int reconciliationApproach;
@@ -31,32 +25,30 @@ public class Configure extends AbstractMenuOption {
     }
 
     @Override
-    public String executeOption(List<Task> taskList) {
-        reconciliationApproach = getConfigureMenuAndOption();
+    public String executeOption(List<Task> taskList, String filename) {
         numEstimators = getNumEstimators();
-
+        reconciliationApproach = getConfigureMenuAndOption();
+        System.out.println("Configuration Updated");
         return " ";
     }
 
-    public int getConfigureMenuAndOption() {
+    private int getConfigureMenuAndOption() {
         Scanner sc = new Scanner(System.in);
-        boolean done = false;
+        System.out.println("\nPLEASE CHOOSE A NEW RECONCILIATION APPROACH\n" + 
+        "Select one of the following options\n" + 
+        "1. Take the highest estimate\n2. Take the median estimate\n3. Use the estimators revised estimate");
         int num = 3;
-        while (!done) {
-            numEstimators = getNumEstimators();
-            System.out.println("\nPLEASE CHOOSE A NEW RECONCILIATION APPROACH\n" + 
-            "Select one of the following options\n" + 
-            "1. Take the highest estimate\n2. Take the median estimate\n3. Use the estimators revised estimate");
+        while (true) {
+            String input = sc.nextLine();
             try {
-                num = sc.nextInt();
+                num = Integer.parseInt(input);
                 if (num >= 1 && num <= 3) {
-                    done = true;
-                    return num;
+                    break;
                 } else {
-                    LOGGER.log(Level.WARNING, "Please enter a valid integer");
+                    System.out.println("Please enter a valid integer between 1 and 3.");
                 }
-            } catch (InputMismatchException ex) {
-                LOGGER.log(Level.SEVERE, "That is not an integer.", ex);
+            } catch (NumberFormatException ex) {
+                System.out.println("That is not a valid number. Please enter a valid integer.");
             }
         }
         return num;
@@ -65,15 +57,19 @@ public class Configure extends AbstractMenuOption {
     private int getNumEstimators(){
         Scanner sc = new Scanner(System.in);
         int result = 0;
-        while(result==0){
-            System.out.println("Please enter the new number of estimators ");
+        while(true){
+            System.out.println("Please enter the new number of estimators: ");
             String num = sc.nextLine();
             try{
                 result = Integer.parseInt(num);
-                return result;
+                if (result > 0) {
+                    break;
+                } else {
+                    System.out.println("Number of estimators must be a positive integer.");
+                }
             }
-            catch(InputMismatchException ex){
-                System.out.println("That is not a number. Enter a number");
+            catch(NumberFormatException ex){
+                System.out.println("That is not a number. Please enter a number.");
             }
         }
         return result;

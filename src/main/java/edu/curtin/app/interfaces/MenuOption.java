@@ -5,7 +5,7 @@ import edu.curtin.app.classes.Task;
 
 public interface MenuOption {
     
-    String executeOption(List<Task> taskLis);
+    String executeOption(List<Task> taskList, String filename);
     
     int getLabel();
 }
