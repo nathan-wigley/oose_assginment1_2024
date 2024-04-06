@@ -53,7 +53,6 @@ public class FileIO {
         String taskID = parts[1];
         String taskDesc = parts[2];
         int effortEstimate = parts.length > 3 && !parts[3].isEmpty() ? Integer.parseInt(parts[3]) : 0;
-    
         return new Task(parentID, taskID, taskDesc, effortEstimate);
     }
 
@@ -71,8 +70,9 @@ public class FileIO {
     }
 
     private String constructLineFromTask(Task task) {
-        String parentPart = task.getParentID() == null ? "" : task.getParentID() + " ; ";
-        String effortPart = task.getEffortEstimate() > 0 ? " ; " + task.getEffortEstimate() : " ; ";
-        return parentPart + task.getTaskID() + " ; " + task.getTaskDesc() + effortPart;
+        String parentPart = (task.getParentID() != null && !task.getParentID().isEmpty()) ? task.getParentID() + " ; " : "; ";
+        String taskIDAndDesc = task.getTaskID() + " ; " + task.getTaskDesc();
+        String effortPart = task.getEffortEstimate() > 0 ? " ; " + task.getEffortEstimate() : ";";
+        return parentPart + taskIDAndDesc + effortPart;
     }
 }

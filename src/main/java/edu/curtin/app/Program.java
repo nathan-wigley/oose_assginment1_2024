@@ -24,8 +24,11 @@ import edu.curtin.app.services.TaskManager;
     public static String fileName = null;
     public static void main(String[] args) throws IOException {
         fileName = getValidFileName(args);
-        if (fileName == null || !ts.loadTasksFromFile(fileName)) {
-            System.out.println("No valid file provided or failed to load tasks. Exiting...");
+        if (fileName == null) {
+            System.out.println("Exiting...");
+            return;
+        } else if (!ts.loadTasksFromFile(fileName)) {
+            System.out.println("Failed to load tasks from file. Exiting...");
             return;
         }
 
@@ -52,13 +55,30 @@ import edu.curtin.app.services.TaskManager;
 
     private static String getValidFileName(String[] args) {
         Scanner sc = new Scanner(System.in);
+        String fileName = null;
+    
         if (args.length > 0) {
             System.out.println("Attempting to load file: " + args[0]);
-            return args[0];
-        } else {
-            System.out.println("Please enter the name of an existing file: ");
-            return sc.nextLine();
+            if (new FileIO().checkFileExists(args[0])) {
+                return args[0];
+            } else {
+                System.out.println("The file does not exist. Please enter a valid filename.");
+            }
         }
+    
+        while (fileName == null) {
+            System.out.println("Please enter the name of an existing file or type 'exit' to quit: ");
+            String input = sc.nextLine().trim();
+            if ("exit".equalsIgnoreCase(input)) {
+                return null;
+            } else if (new FileIO().checkFileExists(input)) {
+                fileName = input;
+            } else {
+                System.out.println("File does not exist. Please try again.");
+            }
+        }
+    
+        return fileName;
     }
 
     private static void initializeOptions() {
