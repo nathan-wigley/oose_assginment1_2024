@@ -12,7 +12,7 @@ import java.util.*;
  */
 
 public class TaskManager {
-    private ArrayList<Task> tasks = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
     private final FileIO fileIO = new FileIO();
 
     public boolean loadTasksFromFile(String fileName) throws IOException {

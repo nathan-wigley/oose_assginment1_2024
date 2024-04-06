@@ -5,10 +5,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.ArrayList;
 import edu.curtin.app.classes.Task;
 
 public class FileIO {
+
+    private static final Logger LOGGER = Logger.getLogger(FileIO.class.getName());
 
     public FileIO() {
     }
@@ -17,9 +22,9 @@ public class FileIO {
         return Files.exists(Paths.get(filename));
     }
 
-    public ArrayList<Task> loadList(String filename) throws IOException {
-        ArrayList<Task> taskList = new ArrayList<>();
-
+    public List<Task> loadList(String filename) throws IOException {
+        List<Task> taskList = new ArrayList<>();
+    
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line = reader.readLine();
             while (line != null) {
@@ -34,7 +39,9 @@ public class FileIO {
                 line = reader.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Failed to load task list from file: " + filename, e);
+            }
         }
         return taskList;
     }

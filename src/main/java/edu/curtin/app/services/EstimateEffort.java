@@ -11,38 +11,19 @@ public class EstimateEffort implements MenuOption {
     private int estimationApproach = 1; 
 
     @Override
-    public String executeOption(ArrayList<Task> taskList) {
-        try {
-            Scanner sc = new Scanner(System.in);
-            Task task = null;
-            while(task == null){
-                String taskID = getEffortEstimateID();
-                task = findTaskById(taskList, taskID);
-            }
-            ArrayList<Task> subTasks = getSubTasks(task); 
-            if (!subTasks.isEmpty()) {
-                for (Task subTask : subTasks) {
-                    executeOption(taskList);
-                }
-            } else {
-                estimateEffortForTask(task);
-            }
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-        }
-        return "Effort estimation completed.";
-    }
+    public String executeOption(List<Task> taskList) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter a taskID:");
+        String taskID = sc.nextLine();
+        Task task = findTaskById(taskList, taskID);
 
-    private String getEffortEstimateID() {
-            System.out.println("Please enter a taskID");
-            Scanner sc = new Scanner(System.in);
-            String taskID = null;
-            try{
-                taskID = String.valueOf(sc.nextLine());
-            }catch(InputMismatchException ex){
-                System.out.println("Not a string: " + ex);
-            }
-            return taskID;
+        if (task != null) {
+            estimateEffortForTaskAndSubtasks(task, taskList);
+        } else {
+            System.out.println("Task not found. Please try again.");
+        }
+
+        return "Effort estimation completed.";
     }
 
     @Override
@@ -50,41 +31,48 @@ public class EstimateEffort implements MenuOption {
         return 1;
     }
 
-    private Task findTaskById(ArrayList<Task> taskList, String taskID) {
-
-        while(true){
-            for (Task task : taskList) {
-                if (task.getTaskID().equals(taskID)) {
-                    return task;
-                }
-                else{
-                    System.out.println("That task ID does not exist in the data provided");
-                    return null;
-                }
+    private Task findTaskById(List<Task> taskList, String taskID) {
+        for (Task task : taskList) {
+            if (task.getTaskID().equals(taskID)) {
+                return task;
             }
         }
+        System.out.println("That task ID does not exist in the data provided.");
+        return null;
     }
 
-    private ArrayList<Task> getSubTasks(Task task) {
-        // needs to be written
-        return new ArrayList<>();
+    private List<Task> getSubTasksForParent(Task parentTask, List<Task> allTasks) {
+        List<Task> subTasks = new ArrayList<>();
+        for (Task task : allTasks) {
+            if (task.getParentID() != null && task.getParentID().equals(parentTask.getTaskID())) {
+                subTasks.add(task);
+            }
+        }
+        return subTasks;
     }
 
 
     private void estimateEffortForTask(Task task) {
-        ArrayList<Integer> estimates = new ArrayList<>();
-        Console cnsl = System.console();
+        List<Integer> estimates = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        int estimatesCount = 0;
+        
         System.out.println("Estimating effort for task: " + task.getTaskID());
-        for (int i = 0; i < 3; i++) {
-            System.out.println("Enter estimate #" + (i + 1) + ": ");
-            char[] input = cnsl.readPassword();
-            // estimates.add(Integer.parseInt(input));
+        while (estimatesCount < 3) {
+            System.out.print("Enter estimate " + (estimatesCount + 1) + ": ");
+            try {
+                int estimate = Integer.parseInt(sc.nextLine());
+                estimates.add(estimate);
+                estimatesCount++;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number. Please enter a valid number.");
+            }
         }
         System.out.println("Estimates: " + estimates);
         reconcileEstimates(estimates, task);
     }
 
-    private void reconcileEstimates(ArrayList<Integer> estimates, Task task) {
+    private void reconcileEstimates(List<Integer> estimates, Task task) {
         Collections.sort(estimates);
         int result = 0;
         switch (estimationApproach) {
@@ -94,9 +82,25 @@ public class EstimateEffort implements MenuOption {
             case 2:
                 result = estimates.get(estimates.size() / 2);
                 break;
+            default:
+                System.out.println("Unexpected estimation approach selected. Defaulting to median estimate.");
+                result = estimates.get(estimates.size() / 2);
+                break;
+                
         }
         task.setEffortEstimate(result);
         System.out.println("Reconciled effort for task " + task.getTaskID() + ": " + result);
+    }
+
+    private void estimateEffortForTaskAndSubtasks(Task task, List<Task> allTasks) {
+        List<Task> subTasks = getSubTasksForParent(task, allTasks);
+        if (subTasks.isEmpty() == false) {
+            for (Task subTask : subTasks) {
+                estimateEffortForTaskAndSubtasks(subTask, allTasks);
+            }
+        } else {
+            estimateEffortForTask(task);
+        }
     }
     
 }

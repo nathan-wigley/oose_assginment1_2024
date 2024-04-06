@@ -17,8 +17,8 @@ import edu.curtin.app.services.Quit;
  */
 
  public class Program {
-    private static ArrayList<Task> taskList = new ArrayList<>();
-    private static final List<MenuOption> options = new ArrayList<>();
+    private static List<Task> taskList = new ArrayList<>();
+    private static final List<MenuOption> OPTIONS = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         initializeOptions();
@@ -36,7 +36,7 @@ import edu.curtin.app.services.Quit;
         boolean done = false;
         while (!done) {
             int choice = menu.getMenuChoice();
-            for (MenuOption option : options) {
+            for (MenuOption option : OPTIONS) {
                 if (option.getLabel() == choice) {
                     option.executeOption(taskList);
                     if (option instanceof Quit) {
@@ -48,9 +48,9 @@ import edu.curtin.app.services.Quit;
         }
     }
     private static void initializeOptions() {
-        options.add(new EstimateEffort());
-        options.add(new Configure());
-        options.add(new Quit());
+        OPTIONS.add(new EstimateEffort());
+        OPTIONS.add(new Configure());
+        OPTIONS.add(new Quit());
     }
 
     private static String getValidFileName(String[] args, Scanner sc, FileIO io) {
