@@ -1,4 +1,11 @@
-Apr 06, 2024 12:23:49 PM edu.curtin.app.services.Configure executeOption
-INFO: Selected option: 1. Max effort: 90, Median effort: 0.0
-Apr 06, 2024 12:24:41 PM edu.curtin.app.services.Configure executeOption
-INFO: Selected option: 2. Max effort: 90, Median effort: 0.0
+Apr 06, 2024 12:44:47 PM edu.curtin.app.services.FileIO loadList
+SEVERE: Failed to load task list from file: 
+java.io.FileNotFoundException:  (No such file or directory)
+	at java.base/java.io.FileInputStream.open0(Native Method)
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:216)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:111)
+	at java.base/java.io.FileReader.<init>(FileReader.java:60)
+	at edu.curtin.app.services.FileIO.loadList(FileIO.java:28)
+	at edu.curtin.app.Program.main(Program.java:30)
+

@@ -12,37 +12,45 @@ import edu.curtin.app.classes.AbstractMenuOption;
 import edu.curtin.app.classes.Estimates;
 import edu.curtin.app.classes.Task;
 
+
+/**
+ * Configuration functionality to allow the user to set the number of estimators and the reconciliation approach
+ * created at: 25/03/24
+ * @author Nathan Wigley (20644750)
+ */
+
 public class Configure extends AbstractMenuOption {
 
-    private static final Logger LOGGER = Logger.getLogger(Configure.class.getName());
+    public static int numEstimators;
+    public static int reconciliationApproach;
 
+    private static final Logger LOGGER = Logger.getLogger(Configure.class.getName());
+    
     public Configure() {
         super(2, "Configure");
     }
 
     @Override
     public String executeOption(List<Task> taskList) {
-        try {
-            int selectedOption = getConfigureMenuAndOption();
-            Estimates estimates = getMaxAndMedianEstimates(taskList);
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO, "Selected option: " + selectedOption + ". Max effort: " + estimates.getMaxEstimate() + ", Median effort: " + estimates.getMedianEstimate());
-            }
-        } catch (InputMismatchException ex) {
-            LOGGER.log(Level.SEVERE, "Input mismatch while selecting the configuration option.", ex);
-        }
+        reconciliationApproach = getConfigureMenuAndOption();
+        numEstimators = getNumEstimators();
+
         return " ";
     }
 
     public int getConfigureMenuAndOption() {
-        while (true) {
+        Scanner sc = new Scanner(System.in);
+        boolean done = false;
+        int num = 3;
+        while (!done) {
+            numEstimators = getNumEstimators();
             System.out.println("\nPLEASE CHOOSE A NEW RECONCILIATION APPROACH\n" + 
             "Select one of the following options\n" + 
             "1. Take the highest estimate\n2. Take the median estimate\n3. Use the estimators revised estimate");
             try {
-                Scanner sc = new Scanner(System.in);
-                int num = sc.nextInt();
+                num = sc.nextInt();
                 if (num >= 1 && num <= 3) {
+                    done = true;
                     return num;
                 } else {
                     LOGGER.log(Level.WARNING, "Please enter a valid integer");
@@ -51,26 +59,23 @@ public class Configure extends AbstractMenuOption {
                 LOGGER.log(Level.SEVERE, "That is not an integer.", ex);
             }
         }
+        return num;
     }
 
-    private Estimates getMaxAndMedianEstimates(List<Task> taskList) {
-        if (taskList == null || taskList.isEmpty()) {
-            System.out.println("Task list is empty.");
-            return new Estimates(0, 0);
+    private int getNumEstimators(){
+        Scanner sc = new Scanner(System.in);
+        int result = 0;
+        while(result==0){
+            System.out.println("Please enter the new number of estimators ");
+            String num = sc.nextLine();
+            try{
+                result = Integer.parseInt(num);
+                return result;
+            }
+            catch(InputMismatchException ex){
+                System.out.println("That is not a number. Enter a number");
+            }
         }
-        List<Task> sortedList = new ArrayList<>(taskList);
-        sortedList.sort(Comparator.comparingInt(Task::getEffortEstimate));
-        int maxEffort = sortedList.get(sortedList.size() - 1).getEffortEstimate();
-
-        double medianEffort;
-        int size = sortedList.size();
-        if (size % 2 == 0) {
-            medianEffort = (sortedList.get(size / 2 - 1).getEffortEstimate() + 
-                            sortedList.get(size / 2).getEffortEstimate()) / 2.0;
-        } else {
-            medianEffort = sortedList.get(size / 2).getEffortEstimate();
-        }
-
-        return new Estimates(maxEffort, medianEffort);
+        return result;
     }
 }
