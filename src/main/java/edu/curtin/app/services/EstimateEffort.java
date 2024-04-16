@@ -13,7 +13,6 @@ public class EstimateEffort implements MenuOption {
 
     public EstimateEffort(List<Task> taskList) {
         this.taskList = taskList;
-        // Defaulting to a simple strategy that can be changed via configuration
         this.estimationStrategy = new RevisedEstimation();
     }
 
