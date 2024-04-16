@@ -1,4 +1,18 @@
-.class
-bin/
-obj/
+# generic gitignore from sources on the web
+/bin/
+/obj/
+*.bin
+*.class
+*.lock
+*.ctxt
+.mtj.tmp/
+*.jar
+*.war
+*.ear
+hs_err_pid*
+.gradle
+/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
 

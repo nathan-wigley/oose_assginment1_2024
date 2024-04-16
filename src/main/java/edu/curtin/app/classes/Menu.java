@@ -4,10 +4,10 @@ import java.util.*;
 import edu.curtin.app.services.TaskManager;
 
 public class Menu {
-    private TaskManager taskManager;
+    public TaskManager taskManager;
 
-    public Menu(TaskManager taskManager) {
-        this.taskManager = taskManager;
+    public Menu(TaskManager tm) {
+        taskManager = tm;
     }
 
     public int getMenuChoice() {

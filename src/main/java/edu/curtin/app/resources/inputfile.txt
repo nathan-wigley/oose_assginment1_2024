@@ -1,5 +1,5 @@
-; A ; Market research ; 10
-; B ; Prototyping ; 45
+; A ; Market research ; 16
+; B ; Prototyping ; 48
 ; C ; Game design;
 C ; D ; Identify core game concepts ; 15
 C ; E ; Develop basic storyline ; 25

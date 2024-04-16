@@ -17,8 +17,6 @@ import edu.curtin.app.classes.Task;
 
     public static int numEstimators;
     public static int reconciliationApproach;
-
-    private static final Logger LOGGER = Logger.getLogger(Configure.class.getName());
     
     public Configure() {
         super(2, "Configure");

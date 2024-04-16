@@ -1,6 +1,4 @@
 package edu.curtin.app.services;
-
-import java.io.Console;
 import java.util.*;
 
 import edu.curtin.app.classes.Estimates;
@@ -22,7 +20,6 @@ public class EstimateEffort implements MenuOption {
         } else {
             System.out.println("Task not found. Please try again.");
         }
-
         return "Effort estimation completed.";
     }
 
@@ -56,16 +53,16 @@ public class EstimateEffort implements MenuOption {
         List<Integer> estimates = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         int estimatesCount = 0;
-        int numEstimators = 3;
+        int numEst;
         if(Configure.numEstimators <= 0){
-            numEstimators = 3;
+            numEst = 3;
         }
         else{
-            numEstimators = Configure.numEstimators;
+            numEst = Configure.numEstimators;
         }
         
-        System.out.println("Estimating effort for task: " + task.getTaskID() + " with " + numEstimators + " estimators");
-        while (estimatesCount < numEstimators) {
+        System.out.println("Estimating effort for task: " + task.getTaskID() + " with " + numEst + " estimators");
+        while (estimatesCount < numEst) {
             System.out.print("Enter estimate " + (estimatesCount + 1) + ": ");
             try {
                 int estimate = Integer.parseInt(sc.nextLine());
@@ -120,25 +117,25 @@ public class EstimateEffort implements MenuOption {
         }
     }
 
-    private Estimates getMaxAndMedianEstimates(List<Task> taskList) {
-        if (taskList == null || taskList.isEmpty()) {
-            System.out.println("Task list is empty.");
-            return new Estimates(0, 0);
-        }
-        List<Task> sortedList = new ArrayList<>(taskList);
-        sortedList.sort(Comparator.comparingInt(Task::getEffortEstimate));
-        int maxEffort = sortedList.get(sortedList.size() - 1).getEffortEstimate();
+    // private Estimates getMaxAndMedianEstimates(List<Task> taskList) {
+    //     if (taskList == null || taskList.isEmpty()) {
+    //         System.out.println("Task list is empty.");
+    //         return new Estimates(0, 0);
+    //     }
+    //     List<Task> sortedList = new ArrayList<>(taskList);
+    //     sortedList.sort(Comparator.comparingInt(Task::getEffortEstimate));
+    //     int maxEffort = sortedList.get(sortedList.size() - 1).getEffortEstimate();
 
-        double medianEffort;
-        int size = sortedList.size();
-        if (size % 2 == 0) {
-            medianEffort = (sortedList.get(size / 2 - 1).getEffortEstimate() + 
-                            sortedList.get(size / 2).getEffortEstimate()) / 2.0;
-        } else {
-            medianEffort = sortedList.get(size / 2).getEffortEstimate();
-        }
+    //     double medianEffort;
+    //     int size = sortedList.size();
+    //     if (size % 2 == 0) {
+    //         medianEffort = (sortedList.get(size / 2 - 1).getEffortEstimate() + 
+    //                         sortedList.get(size / 2).getEffortEstimate()) / 2.0;
+    //     } else {
+    //         medianEffort = sortedList.get(size / 2).getEffortEstimate();
+    //     }
 
-        return new Estimates(maxEffort, medianEffort);
-    }
+    //     return new Estimates(maxEffort, medianEffort);
+    // }
     
 }

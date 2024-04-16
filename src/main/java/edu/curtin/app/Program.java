@@ -18,7 +18,6 @@ import edu.curtin.app.services.TaskManager;
  */
 
  public class Program {
-    private static List<Task> taskList = new ArrayList<>();
     private static final List<MenuOption> OPTIONS = new ArrayList<>();
     private static TaskManager ts = new TaskManager();
     public static String fileName = null;
@@ -63,7 +62,7 @@ import edu.curtin.app.services.TaskManager;
                 return args[0];
             } else {
                 System.out.println("The file does not exist. Please enter a valid filename.");
-            }
+            }    
         }
     
         while (fileName == null) {

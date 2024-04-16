@@ -56,6 +56,11 @@ public class FileIO {
         return new Task(parentID, taskID, taskDesc, effortEstimate);
     }
 
+    /*
+        This method is to write the new tasks to the file. 
+        It recurses over the list and calls the line formatter for each task - constructLineFromTask()
+     */
+
     public void writeTasksToFile(String filename, List<Task> tasks) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Task task : tasks) {
@@ -64,15 +69,27 @@ public class FileIO {
                 writer.newLine();
             }
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to write task list to file: " + filename, e);
-            throw e;
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Failed to write task list to file: " + filename, e);
+            }
         }
     }
-
+    
+    /* 
+        This method will construct the line in the same format as the current state 
+        of the WBS to make sure it practically "replacing" just the estimates 
+    */
     private String constructLineFromTask(Task task) {
-        String parentPart = (task.getParentID() != null && !task.getParentID().isEmpty()) ? task.getParentID() + " ; " : "; ";
-        String taskIDAndDesc = task.getTaskID() + " ; " + task.getTaskDesc();
-        String effortPart = task.getEffortEstimate() > 0 ? " ; " + task.getEffortEstimate() : ";";
-        return parentPart + taskIDAndDesc + effortPart;
+        String delimiter = "; ";
+        if (task.getParentID() != null && !task.getParentID().isEmpty()) {
+            delimiter = task.getParentID() + " ; ";
+        }
+        String taskDetails = task.getTaskID() + " ; " + task.getTaskDesc();
+        String effortDetails = ";";
+        if (task.getEffortEstimate() > 0) {
+            effortDetails = " ; " + task.getEffortEstimate();
+        }
+        return delimiter + taskDetails + effortDetails;
     }
+    
 }
