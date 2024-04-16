@@ -1,10 +1,10 @@
 package edu.curtin.app.services;
 import java.util.Scanner;
-import java.util.List;
-import java.util.logging.Logger;
 
 import edu.curtin.app.classes.AbstractMenuOption;
-import edu.curtin.app.classes.Task;
+import edu.curtin.app.classes.MaxEstimation;
+import edu.curtin.app.classes.MedianEstimation;
+import edu.curtin.app.classes.RevisedEstimation;
 
 
 /**
@@ -15,41 +15,60 @@ import edu.curtin.app.classes.Task;
 
  public class Configure extends AbstractMenuOption {
 
-    public static int numEstimators;
+    public static int numEstimators = 3; //default is 3
     public static int reconciliationApproach;
-    
-    public Configure() {
+    private EstimateEffort estimator;
+
+    public Configure(EstimateEffort estimator) {
         super(2, "Configure");
+        this.estimator = estimator;
     }
 
     @Override
-    public String executeOption(List<Task> taskList, String filename) {
+    public String executeOption(String filename) {
         numEstimators = getNumEstimators();
         reconciliationApproach = getConfigureMenuAndOption();
+        applyReconciliationStrategy();
         System.out.println("Configuration Updated");
-        return " ";
+        return "Configuration updated with " + numEstimators + " estimators and approach " + reconciliationApproach;
+    }
+
+    private void applyReconciliationStrategy() {
+        switch (reconciliationApproach) {
+            case 1:
+                estimator.setEstimationStrategy(new MaxEstimation());
+                break;
+            case 2:
+                estimator.setEstimationStrategy(new MedianEstimation());
+                break;
+            case 3:
+                estimator.setEstimationStrategy(new RevisedEstimation());
+                break;
+            default:
+                System.out.println("Invalid option, setting to maximum by default.");
+                estimator.setEstimationStrategy(new MaxEstimation());
+                break;
+        }
     }
 
     private int getConfigureMenuAndOption() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nPLEASE CHOOSE A NEW RECONCILIATION APPROACH\n" + 
-        "Select one of the following options\n" + 
-        "1. Take the highest estimate\n2. Take the median estimate\n3. Use the estimators revised estimate");
-        int num = 3;
+        System.out.println("\nPlease choose a new reconciliation approach:\n" +
+                           "1. Take the highest estimate\n" +
+                           "2. Take the median estimate\n" +
+                           "3. Let the estimating panel decide\n");
         while (true) {
-            String input = sc.nextLine();
             try {
-                num = Integer.parseInt(input);
-                if (num >= 1 && num <= 3) {
-                    break;
+                int choice = Integer.parseInt(sc.nextLine());
+                if (choice > 0 && choice <=3) {
+                    return choice;
                 } else {
-                    System.out.println("Please enter a valid integer between 1 and 3.");
+                    System.out.println("Please enter a valid option: 1, 2 or 3.");
                 }
-            } catch (NumberFormatException ex) {
-                System.out.println("That is not a valid number. Please enter a valid integer.");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
             }
         }
-        return num;
     }
 
     private int getNumEstimators(){

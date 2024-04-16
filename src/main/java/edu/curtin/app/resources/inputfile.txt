@@ -1,4 +1,4 @@
-; A ; Market research ; 16
+; A ; Market research ; 14
 ; B ; Prototyping ; 48
 ; C ; Game design;
 C ; D ; Identify core game concepts ; 15
@@ -8,11 +8,11 @@ C ; G ; Specify game characters and abilities;
 ; H ; Game implementation;
 H ; I ; Artwork ; 90
 H ; J ; Coding;
-J ; K ; Core game logic;
-J ; L ; Networking ; 35
-J ; M ; Player interface;
+J ; K ; Core game logic ; 14
+J ; L ; Networking ; 18
+J ; M ; Player interface ; 90
 ; N ; Testing;
-N ; O ; Functionality;
-N ; P ; Playability;
-N ; Q ; Rework;
+N ; O ; Functionality ; 15
+N ; P ; Playability ; 22
+N ; Q ; Rework ; 20
 ; R ; Release ; 18

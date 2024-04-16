@@ -8,7 +8,8 @@ import edu.curtin.app.interfaces.MenuOption;
 public class Quit implements MenuOption{
 
     @Override
-    public String executeOption(List<Task> taskList, String filename) {
+    public String executeOption(String filename) {
+        List<Task> taskList = TaskManager.getInstance().getTasks();
         try {
             new FileIO().writeTasksToFile(filename, taskList);
             System.out.println("WBS changes have been saved.");

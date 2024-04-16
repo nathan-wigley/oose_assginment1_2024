@@ -19,7 +19,8 @@ import edu.curtin.app.services.TaskManager;
 
  public class Program {
     private static final List<MenuOption> OPTIONS = new ArrayList<>();
-    private static TaskManager ts = new TaskManager();
+    private static TaskManager ts = TaskManager.getInstance();
+    private static EstimateEffort estimator;
     public static String fileName = null;
     public static void main(String[] args) throws IOException {
         fileName = getValidFileName(args);
@@ -48,7 +49,7 @@ import edu.curtin.app.services.TaskManager;
     }
 
     private static boolean processMenuOption(MenuOption option) {
-        option.executeOption(ts.getTasks(), fileName);
+        option.executeOption(fileName);
         return option instanceof Quit;
     }
 
@@ -81,8 +82,10 @@ import edu.curtin.app.services.TaskManager;
     }
 
     private static void initializeOptions() {
-        OPTIONS.add(new EstimateEffort());
-        OPTIONS.add(new Configure());
+        List<Task> tasks = ts.getTasks();
+        estimator = new EstimateEffort(tasks);
+        OPTIONS.add(estimator);
+        OPTIONS.add(new Configure(estimator));
         OPTIONS.add(new Quit());
     }
 }

@@ -1,20 +1,43 @@
 package edu.curtin.app.services;
 import java.util.*;
+
+import edu.curtin.app.classes.RevisedEstimation;
 import edu.curtin.app.classes.Task;
+import edu.curtin.app.interfaces.EstimationStrategy;
 import edu.curtin.app.interfaces.MenuOption;
 
 
 public class EstimateEffort implements MenuOption {
+    private EstimationStrategy estimationStrategy;
+    private List<Task> taskList;
+
+    public EstimateEffort(List<Task> taskList) {
+        this.taskList = taskList;
+        // Defaulting to a simple strategy that can be changed via configuration
+        this.estimationStrategy = new RevisedEstimation();
+    }
+
+    public void setEstimationStrategy(EstimationStrategy strategy) {
+        this.estimationStrategy = strategy;
+    }
 
     @Override
-    public String executeOption(List<Task> taskList, String filename) {
+    public String executeOption(String filename) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter a taskID:");
         String taskID = sc.nextLine();
         Task task = findTaskById(taskList, taskID);
 
         if (task != null) {
-            estimateEffortForTaskAndSubtasks(task, taskList);
+            List<Task> subTasks = getSubTasksForParent(task, taskList);
+            if (subTasks.isEmpty()) {
+                estimateEffortForTask(task);
+            } else {
+                System.out.println("\nParent task found. Estimating effort of sub-tasks\n");
+                for (Task subTask : subTasks) {
+                    estimateEffortForTask(subTask);
+                }
+            }
         } else {
             System.out.println("Task not found. Please try again.");
         }
@@ -32,7 +55,7 @@ public class EstimateEffort implements MenuOption {
                 return task;
             }
         }
-        System.out.println("That task ID does not exist in the data provided.");
+        System.out.println("That task ID does not exist");
         return null;
     }
 
@@ -45,95 +68,37 @@ public class EstimateEffort implements MenuOption {
         }
         return subTasks;
     }
-
-
+    
     private void estimateEffortForTask(Task task) {
+        if (getSubTasksForParent(task, taskList).isEmpty()) {
+            System.out.println("Estimating Task " + task.getTaskID());
+            List<Integer> estimates = collectEstimates();
+            int result = estimationStrategy.estimate(estimates);
+            task.setEffortEstimate(result);
+            System.out.println("Effort for " + task.getTaskID() + " set to: " + result);
+        } else {
+            System.out.println("Task " + task.getTaskID() + " has subtasks which will be estimated");
+            for (Task subTask : getSubTasksForParent(task, taskList)) {
+                estimateEffortForTask(subTask);
+            }
+        }
+    }
+
+    private List<Integer> collectEstimates() {
         List<Integer> estimates = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
-        int estimatesCount = 0;
-        int numEst;
-        if(Configure.numEstimators <= 0){
-            numEst = 3;
-        }
-        else{
-            numEst = Configure.numEstimators;
-        }
-        
-        System.out.println("Estimating effort for task: " + task.getTaskID() + " with " + numEst + " estimators");
-        while (estimatesCount < numEst) {
-            System.out.print("Enter estimate " + (estimatesCount + 1) + ": ");
+        System.out.println("Collecting estimates now Enter estimates:");
+        int numEstimators = Configure.numEstimators <= 0 ? 3 : Configure.numEstimators;
+        for (int i = 0; i < numEstimators; i++) {
+            System.out.print("Enter estimate " + (i + 1) + ": ");
             try {
                 int estimate = Integer.parseInt(sc.nextLine());
                 estimates.add(estimate);
-                estimatesCount++;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number. Please enter a valid number.");
+                i--;
             }
         }
-        System.out.println("Estimates: " + estimates);
-        reconcileEstimates(estimates, task);
+        return estimates;
     }
-
-    private void reconcileEstimates(List<Integer> estimates, Task task) {
-        Collections.sort(estimates);
-        int result = 0;
-        int estimationApproach = Configure.reconciliationApproach;
-        if(Configure.reconciliationApproach <= 0){
-            estimationApproach = 3;
-        }
-        switch (estimationApproach) {
-            case 1:
-                System.out.println("Maximum Approach");
-                result = estimates.get(estimates.size() - 1);
-                break;
-            case 2:
-                System.out.println("Median approach");
-                result = estimates.get(estimates.size() / 2);
-                break;
-            case 3:
-                System.out.println("Let the estimators dicuss and decide");
-                result = estimates.get(estimates.size() / 2);
-                break;
-            default:
-                System.out.println("Unexpected estimation approach selected. Defaulting to discussion by estimators.");
-                result = estimates.get(estimates.size() / 2);
-                break;
-                
-        }
-        task.setEffortEstimate(result);
-        System.out.println("Reconciled effort for task " + task.getTaskID() + ": " + result);
-    }
-
-    private void estimateEffortForTaskAndSubtasks(Task task, List<Task> allTasks) {
-        List<Task> subTasks = getSubTasksForParent(task, allTasks);
-        if (subTasks.isEmpty() == false) {
-            for (Task subTask : subTasks) {
-                estimateEffortForTaskAndSubtasks(subTask, allTasks);
-            }
-        } else {
-            estimateEffortForTask(task);
-        }
-    }
-
-    // private Estimates getMaxAndMedianEstimates(List<Task> taskList) {
-    //     if (taskList == null || taskList.isEmpty()) {
-    //         System.out.println("Task list is empty.");
-    //         return new Estimates(0, 0);
-    //     }
-    //     List<Task> sortedList = new ArrayList<>(taskList);
-    //     sortedList.sort(Comparator.comparingInt(Task::getEffortEstimate));
-    //     int maxEffort = sortedList.get(sortedList.size() - 1).getEffortEstimate();
-
-    //     double medianEffort;
-    //     int size = sortedList.size();
-    //     if (size % 2 == 0) {
-    //         medianEffort = (sortedList.get(size / 2 - 1).getEffortEstimate() + 
-    //                         sortedList.get(size / 2).getEffortEstimate()) / 2.0;
-    //     } else {
-    //         medianEffort = sortedList.get(size / 2).getEffortEstimate();
-    //     }
-
-    //     return new Estimates(maxEffort, medianEffort);
-    // }
-    
 }

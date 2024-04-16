@@ -14,6 +14,17 @@ import java.util.*;
  public class TaskManager {
     private List<Task> tasks = new ArrayList<>();
     private final FileIO fileIO = new FileIO();
+    private static TaskManager ts= new TaskManager();
+
+    private TaskManager() {}
+
+    public static TaskManager getInstance() {
+        return ts;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
 
     public boolean loadTasksFromFile(String fileName) throws IOException {
         if (fileIO.checkFileExists(fileName)) {
@@ -34,7 +45,7 @@ import java.util.*;
              .filter(task -> Objects.equals(task.getParentID(), parentID))
              .forEach(task -> {
                  System.out.println(indent + task.getTaskID() + ": " + task.getTaskDesc() 
-                                                              + (task.getEffortEstimate() > 0 ? ", effort = " 
+                                                              + (task.getEffortEstimate() > 0 ? ", Effort = " 
                                                               + task.getEffortEstimate() : ""));
                  displayWBS(indent + "  ", task.getTaskID());
              });
@@ -51,9 +62,5 @@ import java.util.*;
 
         System.out.println("\nTotal of all known estimate = " + totalEffort);
         System.out.println("Unknown tasks = " + unknownTasks);
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
     }
 }
