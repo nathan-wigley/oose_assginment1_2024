@@ -6,11 +6,11 @@ C ; E ; Develop basic storyline ; 25
 C ; F ; Develop game world and mechanics ; 55
 C ; G ; Specify game characters and abilities;
 ; H ; Game implementation;
-H ; I ; Artwork ; 90
+H ; I ; Artwork ; 27
 H ; J ; Coding;
-J ; K ; Core game logic ; 14
-J ; L ; Networking ; 18
-J ; M ; Player interface ; 90
+J ; K ; Core game logic ; 21
+J ; L ; Networking ; 33
+J ; M ; Player interface ; 26
 ; N ; Testing;
 N ; O ; Functionality ; 15
 N ; P ; Playability ; 22

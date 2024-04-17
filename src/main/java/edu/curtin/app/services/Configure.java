@@ -56,7 +56,7 @@ import edu.curtin.app.classes.RevisedEstimation;
         System.out.println("\nPlease choose a new reconciliation approach:\n" +
                            "1. Take the highest estimate\n" +
                            "2. Take the median estimate\n" +
-                           "3. Let the estimating panel decide\n");
+                           "3. Let the estimating panel decide");
         while (true) {
             try {
                 int choice = Integer.parseInt(sc.nextLine());
