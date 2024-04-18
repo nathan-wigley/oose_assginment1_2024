@@ -8,9 +8,11 @@ import edu.curtin.app.classes.RevisedEstimation;
 
 
 /**
- * Configuration functionality to allow the user to set the number of estimators and the reconciliation approach
- * created at: 25/03/24
+ * Configure.java : Class
  * @author Nathan Wigley (20644750)
+ * ---------
+ * Configuration functionality to allow the user to set the number of estimators and the reconciliation approach.
+ * This class also extends functionality of the AbstractMenuOption Abstract class
  */
 
  public class Configure extends AbstractMenuOption {
@@ -20,7 +22,7 @@ import edu.curtin.app.classes.RevisedEstimation;
     private EstimateEffort estimator;
 
     public Configure(EstimateEffort estimator) {
-        super(2, "Configure");
+        super(2);
         this.estimator = estimator;
     }
 

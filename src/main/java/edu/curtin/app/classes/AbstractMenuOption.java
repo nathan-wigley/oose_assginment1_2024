@@ -4,19 +4,13 @@ import edu.curtin.app.interfaces.MenuOption;
 
 public abstract class AbstractMenuOption implements MenuOption {
     private int label;
-    private String description;
 
-    public AbstractMenuOption(int label, String description) {
+    public AbstractMenuOption(int label) {
         this.label = label;
-        this.description = description;
     }
 
     @Override
     public int getLabel() {
         return label;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

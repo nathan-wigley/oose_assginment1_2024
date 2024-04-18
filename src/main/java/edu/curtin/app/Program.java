@@ -12,9 +12,10 @@ import edu.curtin.app.services.Quit;
 import edu.curtin.app.services.TaskManager;
 
 /**
- * Entry point for application
  * created at: 25/03/24
  * @author Nathan Wigley (20644750)
+ * ---------
+ * Entry point for application which orchestrates all functionality speficied in the spec sheet
  */
 
  public class Program {
@@ -31,9 +32,7 @@ import edu.curtin.app.services.TaskManager;
             System.out.println("Failed to load tasks from file. Exiting...");
             return;
         }
-
         initializeOptions();
-
         boolean done = false;
         while (!done) {
             ts.displayWBSAndSummary();
@@ -48,10 +47,19 @@ import edu.curtin.app.services.TaskManager;
         }
     }
 
+    /*
+        The call to begin the process of executing the option selected by the user.
+     */
+
     private static boolean processMenuOption(MenuOption option) {
         option.executeOption(fileName);
         return option instanceof Quit;
     }
+
+    /*
+        Checks if the file name provided is valid. If none were provided or if it failed to open/load file,
+        it will ask for another filename. To make matters easy, providing the full path to the file works best
+     */
 
     private static String getValidFileName(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -65,7 +73,6 @@ import edu.curtin.app.services.TaskManager;
                 System.out.println("The file does not exist. Please enter a valid filename.");
             }    
         }
-    
         while (fileName == null) {
             System.out.println("Please enter the name of an existing file or type 'exit' to quit: ");
             String input = sc.nextLine().trim();
@@ -77,9 +84,12 @@ import edu.curtin.app.services.TaskManager;
                 System.out.println("File does not exist. Please try again.");
             }
         }
-    
         return fileName;
     }
+
+    /*
+        Initializing the classes for each option that can be selected within the menu
+     */
 
     private static void initializeOptions() {
         List<Task> tasks = ts.getTasks();

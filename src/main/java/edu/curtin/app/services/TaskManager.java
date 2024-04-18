@@ -4,11 +4,12 @@ import edu.curtin.app.classes.Task;
 
 import java.io.IOException;
 import java.util.*;
-// disclaimer, not anything to do with windows task manager :/
+
 /**
- * Task manager to load tasks into a list
  * created at: 25/03/24
  * @author Nathan Wigley (20644750)
+ * ------
+ * Task manager to load tasks into a list
  */
 
  public class TaskManager {
@@ -45,7 +46,7 @@ import java.util.*;
              .filter(task -> Objects.equals(task.getParentID(), parentID))
              .forEach(task -> {
                  System.out.println(indent + task.getTaskID() + ": " + task.getTaskDesc() 
-                                                              + (task.getEffortEstimate() > 0 ? ", Effort = " 
+                                                              + (task.getEffortEstimate() > 0 ? " ; " 
                                                               + task.getEffortEstimate() : ""));
                  displayWBS(indent + "  ", task.getTaskID());
              });
@@ -60,7 +61,7 @@ import java.util.*;
                                 .filter(task -> task.getEffortEstimate() == 0 && task.getParentID() != null)
                                 .count();
 
-        System.out.println("\nTotal of all known estimate = " + totalEffort);
-        System.out.println("Unknown tasks = " + unknownTasks);
+        System.out.println("\nTotal of all known estimates = " + totalEffort);
+        System.out.println("Number of unknown tasks = " + unknownTasks);
     }
 }

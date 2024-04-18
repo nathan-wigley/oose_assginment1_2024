@@ -4,6 +4,11 @@ import edu.curtin.app.interfaces.EstimationStrategy;
 import java.util.Collections;
 import java.util.List;
 
+/*
+  When selected as the Estimation Approach, it will get the median estimate from all
+  the estimates providedl This is a part of the Strategy Pattern
+ */
+
 public class MedianEstimation implements EstimationStrategy {
     @Override
     public int estimate(List<Integer> estimates) {

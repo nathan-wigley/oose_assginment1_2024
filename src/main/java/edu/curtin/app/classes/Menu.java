@@ -3,6 +3,13 @@ package edu.curtin.app.classes;
 import java.util.*;
 import edu.curtin.app.services.TaskManager;
 
+/**
+  @author Nathan Wigley 20644750
+  -------
+  This class handles the Menu's design and also the choice that is selected by the user once
+  the menu has been displayed
+ */
+
 public class Menu {
     public TaskManager taskManager;
 
