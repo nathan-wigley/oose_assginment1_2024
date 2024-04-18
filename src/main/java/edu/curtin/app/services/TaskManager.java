@@ -53,16 +53,22 @@ import java.util.*;
     }
 
     private void getSummary() {
-        int totalEffort = tasks.stream()
-                               .filter(task -> task.getEffortEstimate() > 0)
-                               .mapToInt(Task::getEffortEstimate)
-                               .sum();
-        long unknownTasks = tasks.stream()
-                                .filter(task -> task.getEffortEstimate() == 0 && task.getParentID() != null)
-                                .count();
-
+        int totalEffort = 0;
+        long unknownTasks = 0;
+    
+        for (Task task : tasks) {
+            if (task.getEffortEstimate() > 0) {
+                totalEffort += task.getEffortEstimate();
+            }
+    
+            if (task.getEffortEstimate() == 0 && task.getParentID() != null) {
+                unknownTasks++;
+            }
+        }
+    
         System.out.println("\nTotal of all known estimates = " + totalEffort);
         System.out.println("Number of unknown tasks = " + unknownTasks);
     }
+    
 }
 
