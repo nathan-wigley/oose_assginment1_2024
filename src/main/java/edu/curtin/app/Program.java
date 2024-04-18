@@ -20,7 +20,7 @@ import edu.curtin.app.services.TaskManager;
 
  public class Program {
     private static final List<MenuOption> OPTIONS = new ArrayList<>();
-    private static TaskManager ts = TaskManager.getInstance();
+    private static TaskManager tm = TaskManager.getInstance();
     private static EstimateEffort estimator;
     public static String fileName = null;
     public static void main(String[] args) throws IOException {
@@ -28,15 +28,15 @@ import edu.curtin.app.services.TaskManager;
         if (fileName == null) {
             System.out.println("Exiting...");
             return;
-        } else if (!ts.loadTasksFromFile(fileName)) {
+        } else if (!tm.loadTasksFromFile(fileName)) {
             System.out.println("Failed to load tasks from file. Exiting...");
             return;
         }
         initializeOptions();
         boolean done = false;
         while (!done) {
-            ts.displayWBSAndSummary();
-            Menu menu = new Menu(ts);
+            tm.displayWBSAndSummary();
+            Menu menu = new Menu(tm);
             int choice = menu.getMenuChoice();
             for (MenuOption option : OPTIONS) {
                 if (option.getLabel() == choice) {
@@ -92,7 +92,7 @@ import edu.curtin.app.services.TaskManager;
      */
 
     private static void initializeOptions() {
-        List<Task> tasks = ts.getTasks();
+        List<Task> tasks = tm.getTasks();
         estimator = new EstimateEffort(tasks);
         OPTIONS.add(estimator);
         OPTIONS.add(new Configure(estimator));

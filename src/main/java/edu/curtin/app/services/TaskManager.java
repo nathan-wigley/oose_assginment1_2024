@@ -60,15 +60,12 @@ import java.util.*;
             if (task.getEffortEstimate() > 0) {
                 totalEffort += task.getEffortEstimate();
             }
-    
             if (task.getEffortEstimate() == 0 && task.getParentID() != null) {
                 unknownTasks++;
             }
         }
-    
         System.out.println("\nTotal of all known estimates = " + totalEffort);
         System.out.println("Number of unknown tasks = " + unknownTasks);
     }
-    
 }
 
