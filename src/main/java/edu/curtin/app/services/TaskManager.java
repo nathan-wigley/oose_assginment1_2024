@@ -37,22 +37,22 @@ import java.util.*;
 
     public void displayWBSAndSummary() {
         System.out.println("\nCURRENT WORK BREAKDOWN STRUCTURE\n");
-        getWBS("", null);
-        getSummary();
+        printWBS("", null);
+        printSummary();
     }
 
-    private void getWBS(String indent, String parentID) {
+    private void printWBS(String indent, String parentID) {
         tasks.stream()
              .filter(task -> Objects.equals(task.getParentID(), parentID))
              .forEach(task -> {
                  System.out.println(indent + task.getTaskID() + ": " + task.getTaskDesc() 
                                                               + (task.getEffortEstimate() > 0 ? " ; " 
                                                               + task.getEffortEstimate() : ""));
-                 getWBS(indent + "  ", task.getTaskID());
+                 printWBS(indent + "  ", task.getTaskID());
              });
     }
 
-    private void getSummary() {
+    private void printSummary() {
         int totalEffort = 0;
         long unknownTasks = 0;
     
