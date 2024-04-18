@@ -15,7 +15,7 @@ import java.util.*;
  public class TaskManager {
     private List<Task> tasks = new ArrayList<>();
     private final FileIO fileIO = new FileIO();
-    private static TaskManager ts= new TaskManager();
+    private static TaskManager ts = new TaskManager();
 
     private TaskManager() {}
 
@@ -37,22 +37,22 @@ import java.util.*;
 
     public void displayWBSAndSummary() {
         System.out.println("\nCURRENT WORK BREAKDOWN STRUCTURE\n");
-        displayWBS("", null);
-        displaySummary();
+        getWBS("", null);
+        getSummary();
     }
 
-    private void displayWBS(String indent, String parentID) {
+    private void getWBS(String indent, String parentID) {
         tasks.stream()
              .filter(task -> Objects.equals(task.getParentID(), parentID))
              .forEach(task -> {
                  System.out.println(indent + task.getTaskID() + ": " + task.getTaskDesc() 
                                                               + (task.getEffortEstimate() > 0 ? " ; " 
                                                               + task.getEffortEstimate() : ""));
-                 displayWBS(indent + "  ", task.getTaskID());
+                 getWBS(indent + "  ", task.getTaskID());
              });
     }
 
-    private void displaySummary() {
+    private void getSummary() {
         int totalEffort = tasks.stream()
                                .filter(task -> task.getEffortEstimate() > 0)
                                .mapToInt(Task::getEffortEstimate)
@@ -65,3 +65,4 @@ import java.util.*;
         System.out.println("Number of unknown tasks = " + unknownTasks);
     }
 }
+

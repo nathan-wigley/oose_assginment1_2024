@@ -1,5 +1,9 @@
 package edu.curtin.app.classes;
 
+/*
+    This class represents a given task in the WBS, which is practically just a line.
+ */
+
 public class Task {
     private String parentID; //can be empty, depends on the task
     private String taskID; // id of the current task
@@ -15,7 +19,7 @@ public class Task {
         this.effortEstimate = effortEstimate;
     }
 
-    //MODIFIERS
+    //ACCESSORS AND MUTATORS
 
     public String getParentID() {
         return parentID;
