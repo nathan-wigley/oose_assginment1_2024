@@ -1,4 +1,4 @@
-; A ; Market research ; 14
+; A ; Market research ; 20
 ; B ; Prototyping ; 48
 ; C ; Game design;
 C ; D ; Identify core game concepts ; 15
