@@ -1,0 +1,19 @@
+Reponses to criteria - 1.1
+
+Criteria e:
+My implementation of the Strategy patern came to the project late as I wasn't 100% sure how to use it in a meaningful way
+that would improve the functionality and scalability of the application. In the end though, I used the strategy pattern
+alongside my Estimation functionality, where a certain estimation strategy will be called based on what the user has
+configured. The reason that I did it this was is because I realised that the 3 options: Median, Max and Self inputted options
+were pretty closely related therefore they could all implement the same interface. Not sure if I ended up doing it correctly
+in the end as this part of the app was a bit of a refactor at the end of the project.
+
+Criteria f:
+The composite pattern was used in the MenuOption selection process. Basically I have these 3 menu options which are EstimateEffort,
+Configure and Quit which can all be executed based on what the user selects, but if you dont have the code of those functionalities,
+you won't know what they do until the user inputs one of the 3 viable numbers. This is the kind thing I wanted from ths implementation
+and i'm glad I was able to implement it. The MenuOption is the interface used as the 'middle-man' in this instance to orchestrate the 
+different use cases as they are selected.
+
+
+
